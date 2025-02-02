@@ -1,16 +1,14 @@
 ---
 - name: Restart SSH
-  systemd:
+  ansible.builtin.service:
     name: ssh
     state: restarted
-  when: ansible_service_mgr is 'systemd'
   tags:
     - ssh_signed_hostkeys
 
 - name: Restart SSH
-  service:
+  ansible.builtin.service:
     name: ssh
     state: restarted
-  when: ansible_service_mgr is not 'systemd'
   tags:
     - ssh_signed_hostkeys

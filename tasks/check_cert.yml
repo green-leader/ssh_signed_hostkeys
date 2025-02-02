@@ -7,7 +7,10 @@
   tags:
     - ssh_signed_hostkeys
 
-- include: sign.yml signed_ssh_certfile="{{signed_ssh_keyfile}}-cert.pub"
+- name: Sign certificate
+  include_tasks: sign.yml
   when: signed_ssh_cert_stat is defined and not signed_ssh_cert_stat.stat.exists
+  vars:
+     signed_ssh_certfile: "{{signed_ssh_keyfile}}-cert.pub"
   tags:
     - ssh_signed_hostkeys
