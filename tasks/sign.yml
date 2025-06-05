@@ -10,7 +10,7 @@
 - name: Decrypt signing key
   become: true
   ansible.builtin.copy:
-    src: ca_key
+    src: "{{ ssh_signed_ca_keypath }}"
     dest: "{{ ssh_signed_tempfile.path }}"
     owner: root
     group: root
