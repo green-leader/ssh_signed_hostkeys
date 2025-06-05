@@ -1,5 +1,6 @@
 ---
 - name: Restart SSH
+  become: true
   ansible.builtin.service:
     name: ssh
     state: restarted
@@ -7,6 +8,7 @@
     - ssh_signed_hostkeys
 
 - name: Restart SSH
+  become: true
   ansible.builtin.service:
     name: ssh
     state: restarted

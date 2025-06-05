@@ -8,6 +8,7 @@
     - ssh_signed_hostkeys
 
 - name: Decrypt signing key
+  become: true
   ansible.builtin.copy:
     src: ca_key
     dest: "{{ ssh_signed_tempfile.path }}"
@@ -18,11 +19,13 @@
     - ssh_signed_hostkeys
 
 - name: Sign key
+  become: true
   ansible.builtin.command: "ssh-keygen -s {{ ssh_signed_tempfile.path }} -I {{ signed_ssh_certificate_identity }} -h -n {{ ','.join(signed_ssh_hostnames) }} -V {{ signed_ssh_valid_time }} {{ signed_ssh_certfile.rstrip('-cert.pub') }}"
   tags:
     - ssh_signed_hostkeys
 
 - name: File permissions
+  become: true
   ansible.builtin.file:
     path: "{{ signed_ssh_certfile }}"
     owner: root
@@ -32,6 +35,7 @@
     - ssh_signed_hostkeys
 
 - name: Add cert to sshd_config
+  become: true
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     line: "HostCertificate {{ signed_ssh_certfile }}"
@@ -41,6 +45,7 @@
     - ssh_signed_hostkeys
 
 - name: Remove signing cert
+  become: true
   ansible.builtin.file:
     path: "{{ ssh_signed_tempfile.path }}"
     state: absent
