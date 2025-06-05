@@ -2,15 +2,7 @@
 - name: Restart SSH
   become: true
   ansible.builtin.service:
-    name: ssh
-    state: restarted
-  tags:
-    - ssh_signed_hostkeys
-
-- name: Restart SSH
-  become: true
-  ansible.builtin.service:
-    name: ssh
+    name: "{{ signed_ssh_service_name }}"
     state: restarted
   tags:
     - ssh_signed_hostkeys

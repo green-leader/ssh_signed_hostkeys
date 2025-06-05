@@ -12,3 +12,4 @@ signed_ssh_hostnames:
 signed_ssh_valid_time: +520w
 signed_ssh_certificate_identity: ssh_signed_hostkeys
 signed_ssh_nuke_existing_sigs: false
+signed_ssh_service_name: "{{ 'ssh' if ansible_distribution == 'Debian' else 'sshd' }}"
