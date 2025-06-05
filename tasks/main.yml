@@ -2,29 +2,29 @@
 #  For re-signing keys when more names have been added
 #  --extra-vars 'signed_ssh_nuke_existing_sigs=true'
 - name: Nuke existing sigs
-  file:
-    path: "{{item}}-cert.pub"
+  ansible.builtin.file:
+    path: "{{ item }}-cert.pub"
     state: absent
   when: signed_ssh_nuke_existing_sigs
-  with_items: "{{signed_ssh_keyfiles}}"
+  with_items: "{{ signed_ssh_keyfiles }}"
   tags:
     - ssh_signed_hostkeys
 
 - name: Test if keyfile exists
-  stat:
-    path: "{{item}}.pub"
+  ansible.builtin.stat:
+    path: "{{ item }}.pub"
   register: signed_ssh_key_stat
-  check_mode: no
-  with_items: "{{signed_ssh_keyfiles}}"
+  check_mode: false
+  with_items: "{{ signed_ssh_keyfiles }}"
   tags:
     - ssh_signed_hostkeys
 
 - name: Check cert
-  include_tasks: check_cert.yml
+  ansible.builtin.include_tasks: check_cert.yml
   when: signed_ssh_key_stat is defined and signed_ssh_stat_keyfile.stat.exists
-  with_items: "{{signed_ssh_key_stat.results}}"
+  with_items: "{{ signed_ssh_key_stat.results }}"
   vars:
-    signed_ssh_keyfile: "{{signed_ssh_stat_keyfile.item}}"
+    signed_ssh_keyfile: "{{ signed_ssh_stat_keyfile.item }}"
   loop_control:
     loop_var: signed_ssh_stat_keyfile
   tags:

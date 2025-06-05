@@ -4,17 +4,17 @@ galaxy_info:
   description: Sign SSH host keys using vault-encrypted CA key.
   license: BSD
 
-  min_ansible_version: 1.6
+  min_ansible_version: "1.6"
   platforms:
-  - name: Ubuntu
-    versions:
-      - xenial
-      - bionic
-  - name: Debian
-    versions:
-      - jessie
-      - stretch
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+    - name: Debian
+      versions:
+        - jessie
+        - stretch
   galaxy_tags:
-      - system
-      - ssh
+    - system
+    - ssh
 dependencies: []

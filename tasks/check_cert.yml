@@ -1,16 +1,16 @@
 ---
 - name: Test if cert exists
-  stat:
-    path: "{{signed_ssh_keyfile}}-cert.pub"
+  ansible.builtin.stat:
+    path: "{{ signed_ssh_keyfile }}-cert.pub"
   register: signed_ssh_cert_stat
-  check_mode: no
+  check_mode: false
   tags:
     - ssh_signed_hostkeys
 
 - name: Sign certificate
-  include_tasks: sign.yml
+  ansible.builtin.include_tasks: sign.yml
   when: signed_ssh_cert_stat is defined and not signed_ssh_cert_stat.stat.exists
   vars:
-     signed_ssh_certfile: "{{signed_ssh_keyfile}}-cert.pub"
+    signed_ssh_certfile: "{{ signed_ssh_keyfile }}-cert.pub"
   tags:
     - ssh_signed_hostkeys

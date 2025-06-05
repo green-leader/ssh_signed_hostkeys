@@ -1,6 +1,6 @@
 ---
 - name: Make tempfile
-  tempfile:
+  ansible.builtin.tempfile:
     state: file
     suffix: signed_hostkeys
   register: ssh_signed_tempfile
@@ -8,9 +8,9 @@
     - ssh_signed_hostkeys
 
 - name: Decrypt signing key
-  copy:
+  ansible.builtin.copy:
     src: ca_key
-    dest: "{{ssh_signed_tempfile.path}}"
+    dest: "{{ ssh_signed_tempfile.path }}"
     owner: root
     group: root
     mode: a=-,u+r
@@ -18,13 +18,13 @@
     - ssh_signed_hostkeys
 
 - name: Sign key
-  command: "ssh-keygen -s {{ssh_signed_tempfile.path}} -I {{signed_ssh_certificate_identity}} -h -n {{','.join(signed_ssh_hostnames)}} -V {{signed_ssh_valid_time}} {{signed_ssh_certfile.rstrip('-cert.pub')}}"
+  ansible.builtin.command: "ssh-keygen -s {{ ssh_signed_tempfile.path }} -I {{ signed_ssh_certificate_identity }} -h -n {{ ','.join(signed_ssh_hostnames) }} -V {{ signed_ssh_valid_time }} {{ signed_ssh_certfile.rstrip('-cert.pub') }}"
   tags:
     - ssh_signed_hostkeys
 
 - name: File permissions
-  file:
-    path: "{{signed_ssh_certfile}}"
+  ansible.builtin.file:
+    path: "{{ signed_ssh_certfile }}"
     owner: root
     group: root
     mode: a=r,u+w
@@ -32,17 +32,17 @@
     - ssh_signed_hostkeys
 
 - name: Add cert to sshd_config
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
-    line: "HostCertificate {{signed_ssh_certfile}}"
-    regexp: "HostCertificate {{signed_ssh_certfile}}"
+    line: "HostCertificate {{ signed_ssh_certfile }}"
+    regexp: "HostCertificate {{ signed_ssh_certfile }}"
   notify: Restart SSH
   tags:
     - ssh_signed_hostkeys
 
 - name: Remove signing cert
-  file:
-    path: "{{ssh_signed_tempfile.path}}"
+  ansible.builtin.file:
+    path: "{{ ssh_signed_tempfile.path }}"
     state: absent
   tags:
     - ssh_signed_hostkeys
