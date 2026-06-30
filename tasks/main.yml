@@ -5,7 +5,7 @@
   ansible.builtin.file:
     path: "{{ item }}-cert.pub"
     state: absent
-  when: signed_ssh_nuke_existing_sigs
+  when: signed_ssh_nuke_existing_sigs | bool
   with_items: "{{ signed_ssh_keyfiles }}"
   tags:
     - ssh_signed_hostkeys
